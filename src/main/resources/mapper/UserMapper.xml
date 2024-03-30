@@ -34,6 +34,18 @@
         where  id = #{id,jdbcType=INTEGER} 
     </select>
 
+    <select id="page" resultType="com.plume.management.pojo.User">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        limit
+        #{pageNum},#{pageSize}
+    </select>
+
+    <select id="pageTotal" resultType="java.lang.Integer">
+        select count(id) from sys_user
+    </select>
+
     <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
         DELETE FROM sys_user
         WHERE id IN

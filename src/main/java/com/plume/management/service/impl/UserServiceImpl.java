@@ -19,6 +19,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> page(Integer pageNum, Integer pageSize) {
+        return userMapper.page(pageNum,pageSize);
+    }
+
+    @Override
     public Integer save(User user) {
         return userMapper.insertSelective(user);
     }
@@ -31,5 +36,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer delete(List<Long> ids) {
         return userMapper.deleteByPrimaryKeys(ids);
+    }
+
+    @Override
+    public Integer pageTotal() {
+        return userMapper.pageTotal();
     }
 }

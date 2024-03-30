@@ -6,7 +6,9 @@ import com.plume.management.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -23,6 +25,21 @@ public class UserController {
         System.out.println(("----- selectAll method  ------"));
         List<User> userList = userService.selectAll();
         return userList;
+    }
+
+    /**
+     * 分页查询
+     * @return
+     */
+    @GetMapping("/page")
+    public Map<String, Object> page(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        pageNum = (pageNum - 1) * pageSize;
+        List<User> userList = userService.page(pageNum, pageSize);
+        Integer total = userService.pageTotal();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data",userList);
+        map.put("total",total);
+        return map;
     }
 
     /**
