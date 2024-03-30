@@ -8,7 +8,7 @@ import './assets/gloable.css';
 
 
 Vue.config.productionTip = false
-Vue.use(ElementUI,{size:"small"});
+Vue.use(ElementUI,{size:"mini"});
 
 new Vue({
   router,
