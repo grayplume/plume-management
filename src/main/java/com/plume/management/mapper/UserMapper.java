@@ -16,7 +16,7 @@ public interface UserMapper {
 
     List<User> selectAll();
 
-    List<User> page(Integer pageNum, Integer pageSize);
+    List<User> page(Integer pageNum, Integer pageSize,String userName,String email,String address);
 
     int deleteByPrimaryKeys(List<Long> ids);
 
@@ -26,5 +26,5 @@ public interface UserMapper {
 
     int updateByPrimaryKeySelective(User record);
 
-    int pageTotal();
+    int pageTotal(String userName,String email,String address);
 }

@@ -38,12 +38,20 @@
         select
         <include refid="Base_Column_List"/>
         from sys_user
+        where
+            username like concat("%",#{userName},"%") and
+            email like concat("%",#{email},"%") and
+            address like concat("%",#{address},"%")
         limit
         #{pageNum},#{pageSize}
     </select>
 
     <select id="pageTotal" resultType="java.lang.Integer">
         select count(id) from sys_user
+        where
+            username like concat("%",#{userName},"%") and
+            email like concat("%",#{email},"%") and
+            address like concat("%",#{address},"%")
     </select>
 
     <delete id="deleteByPrimaryKeys" parameterType="java.util.List">

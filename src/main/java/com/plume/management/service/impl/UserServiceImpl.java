@@ -19,8 +19,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> page(Integer pageNum, Integer pageSize) {
-        return userMapper.page(pageNum,pageSize);
+    public List<User> page(Integer pageNum, Integer pageSize,String userName,String email,String address) {
+        return userMapper.page(pageNum,pageSize,userName,email,address);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer pageTotal() {
-        return userMapper.pageTotal();
+    public Integer pageTotal(String userName,String email,String address) {
+        return userMapper.pageTotal(userName,email,address);
     }
 }

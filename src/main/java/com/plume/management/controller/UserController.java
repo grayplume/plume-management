@@ -32,10 +32,14 @@ public class UserController {
      * @return
      */
     @GetMapping("/page")
-    public Map<String, Object> page(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+    public Map<String, Object> page(@RequestParam Integer pageNum,
+                                    @RequestParam Integer pageSize,
+                                    @RequestParam String userName,
+                                    @RequestParam String email,
+                                    @RequestParam String address){
         pageNum = (pageNum - 1) * pageSize;
-        List<User> userList = userService.page(pageNum, pageSize);
-        Integer total = userService.pageTotal();
+        List<User> userList = userService.page(pageNum, pageSize,userName,email,address);
+        Integer total = userService.pageTotal(userName,email,address);
         HashMap<String, Object> map = new HashMap<>();
         map.put("data",userList);
         map.put("total",total);
