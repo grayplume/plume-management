@@ -1,5 +1,6 @@
 package com.plume.management.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
 import com.plume.management.service.UserService;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements UserService {
 
     @Autowired
     private UserMapper userMapper;
@@ -24,13 +25,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer save(User user) {
-        return userMapper.insertSelective(user);
+    public boolean saveUser(User user) {
+        return save(user);
     }
 
     @Override
-    public Integer update(User user) {
-        return userMapper.updateByPrimaryKeySelective(user);
+    public boolean update(User user) {
+        return updateById(user);
+        // return userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.plume.management.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.plume.management.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,8 +12,8 @@ import java.util.List;
 * @createDate 2024-03-30 15:42:25
 * @Entity com.plume.management.pojo.User
 */
-@Mapper
-public interface UserMapper {
+// @Mapper
+public interface UserMapper extends BaseMapper<User> {
 
     List<User> selectAll();
 

@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,12 +19,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName(value = "sys_user")
+@Schema(description = "用户表")
 public class User implements Serializable {
+
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     private String username;
 
-    @JsonIgnore
+    // @JsonIgnore
     private String password;
 
     private String nickname;

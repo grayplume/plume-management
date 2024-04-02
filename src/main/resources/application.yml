@@ -4,8 +4,18 @@ spring:
     url: jdbc:mysql://localhost:3306/management?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: 51166
-mybatis:
-  mapper-locations: classpath*:mapper/*.xml
+#mybatis:
+#  mapper-locations: classpath*:mapper/*.xml
+#  configuration:
+#    map-underscore-to-camel-case: true
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis-plus:
+#  config-location: classpath*:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 配置swagger文档的访问路径
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
