@@ -15,17 +15,17 @@ import java.util.List;
 // @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
-    List<User> selectAll();
+    // List<User> selectAll();
 
-    List<User> page(Integer pageNum, Integer pageSize,String userName,String email,String address);
+    // List<User> page(Integer pageNum, Integer pageSize,String userName,String email,String address);
 
-    int deleteByPrimaryKeys(List<Long> ids);
-
-    int insertSelective(User record);
-
-    User selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(User record);
-
-    int pageTotal(String userName,String email,String address);
+    // int deleteByPrimaryKeys(List<Long> ids);
+    //
+    // int insertSelective(User record);
+    //
+    // User selectByPrimaryKey(Long id);
+    //
+    // int updateByPrimaryKeySelective(User record);
+    //
+    // int pageTotal(String userName,String email,String address);
 }

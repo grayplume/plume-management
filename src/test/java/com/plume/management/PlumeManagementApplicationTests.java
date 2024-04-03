@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 class PlumeManagementApplicationTests {
@@ -22,8 +23,8 @@ class PlumeManagementApplicationTests {
         List<Long> moreLongs = List.of(4L, 5L);
         ids.addAll(moreLongs);
 
-        int result = userService.delete(ids);
-        System.out.println(result);
+        boolean delete = userService.delete(ids);
+        System.out.println(delete);
     }
 
     @Test
@@ -32,8 +33,8 @@ class PlumeManagementApplicationTests {
         user.setId(3);
         user.setUsername("test3");
         user.setNickname("test3");
-        int result = userService.update(user);
-        System.out.println(result);
+        boolean update = userService.update(user);
+        System.out.println(update);
     }
 
     @Test
@@ -44,18 +45,22 @@ class PlumeManagementApplicationTests {
         user.setEmail("test@qq.com");
         user.setPhone("123456789");
         user.setAddress("test");
+        List<User> list = new ArrayList<User>();
         for (int i = 0; i < 10; i++) {
-            user.setUsername("test"+i);
-            userService.save(user);
+            Random random = new Random(100);
+            int i1 = random.nextInt();
+            user.setUsername("test"+i1);
+            list.add(user);
         }
+        userService.saveBatch(list);
     }
 
-    @Test
-    void testSelect() {
-        System.out.println(("----- selectAll method test ------"));
-        List<User> userList = userService.selectAll();
-        System.out.println(userList);
-    }
+    // @Test
+    // void testSelect() {
+    //     System.out.println(("----- selectAll method test ------"));
+    //     List<User> userList = userService.selectAll();
+    //     System.out.println(userList);
+    // }
 
 
 

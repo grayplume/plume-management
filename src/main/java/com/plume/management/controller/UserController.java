@@ -1,5 +1,7 @@
 package com.plume.management.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
 import com.plume.management.service.UserService;
@@ -24,32 +26,43 @@ public class UserController {
      * 查询所有用户
      * @return
      */
-    @GetMapping("/list")
-    @Operation(summary = "查询所有用户")
-    public List<User> testSelect() {
-        return userService.selectAll();
-    }
+    // @GetMapping("/list")
+    // @Operation(summary = "查询所有用户")
+    // public List<User> testSelect() {
+    //     return userService.selectAll();
+    // }
 
     /**
      * 分页查询
      * @return
      */
+    // @GetMapping("/page")
+    // @Operation(summary = "分页查询")
+    // public Map<String, Object> page(@Parameter(description = "页数")@RequestParam Integer pageNum,
+    //                                 @Parameter(description = "页面大小")@RequestParam Integer pageSize,
+    //                                 @Parameter(description = "用户名") @RequestParam(value = "userName",required = false) String userName,
+    //                                 @Parameter(description = "邮箱")@RequestParam(value = "email",required = false) String email,
+    //                                 @Parameter(description = "地址")@RequestParam(value = "address",required = false) String address){
+    //     pageNum = (pageNum - 1) * pageSize;
+    //     List<User> userList = userService.page(pageNum, pageSize,userName,email,address);
+    //     Integer total = userService.pageTotal(userName,email,address);
+    //     HashMap<String, Object> map = new HashMap<>();
+    //     map.put("data",userList);
+    //     map.put("total",total);
+    //     return map;
+    // }
+
+    // mybatis-plus
     @GetMapping("/page")
     @Operation(summary = "分页查询")
-    public Map<String, Object> page(@Parameter(description = "页数")@RequestParam Integer pageNum,
+    public IPage<User> page(@Parameter(description = "页数")@RequestParam Integer pageNum,
                                     @Parameter(description = "页面大小")@RequestParam Integer pageSize,
                                     @Parameter(description = "用户名") @RequestParam(value = "userName",required = false) String userName,
                                     @Parameter(description = "邮箱")@RequestParam(value = "email",required = false) String email,
                                     @Parameter(description = "地址")@RequestParam(value = "address",required = false) String address){
-        pageNum = (pageNum - 1) * pageSize;
-        List<User> userList = userService.page(pageNum, pageSize,userName,email,address);
-        Integer total = userService.pageTotal(userName,email,address);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("data",userList);
-        map.put("total",total);
-        return map;
-    }
 
+        return userService.page(pageNum, pageSize,userName,email,address);
+    }
     /**
      * 新增用户
      * @param user
@@ -76,7 +89,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/delete/{ids}")
-    public Integer delete(@PathVariable("ids") List<Long> ids) {
+    public Boolean delete(@PathVariable("ids") List<Long> ids) {
         return userService.delete(ids);
     }
 }
