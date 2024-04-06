@@ -38,11 +38,6 @@ export default {
             this.tableData = res.records
             this.total = res.total
           })
-      // fetch("http://localhost:8080/user/page?pageNum="+this.pageNum+"&pageSize="+this.pageSize+"&userName="+this.userName+"&email="+this.email+"&address="+this.address).then(res => res.json()).then(res=>{
-      //   console.log(res)
-      //   this.tableData = res.data
-      //   this.total = res.total
-      // })
     },
     reset() {
       this.userName = ''
@@ -95,6 +90,13 @@ export default {
       this.pageNum = pageNum
       this.load()
     },
+    exp(){
+      window.open("http://localhost:8080/user/export")
+    },
+    handleExcelImportSuccess(){
+      this.$message.success("文件导入成功")
+      this.load()
+    }
   }
 }
 </script>
@@ -121,8 +123,11 @@ export default {
         <el-button type="danger" slot="reference" >删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
 
-      <el-button type="primary" class="ml-5">导入<i class="el-icon-bottom"></i></el-button>
-      <el-button type="primary">导出<i class="el-icon-top"></i></el-button>
+      <el-upload action="http://localhost:8080/user/import" :show-file-list="false" accept="xlsx" :on-success="handleExcelImportSuccess" style="display: inline-block" class="mr-5">
+        <el-button type="primary" class="ml-5">导入<i class="el-icon-bottom"></i></el-button>
+      </el-upload>
+
+      <el-button type="primary" @click="exp">导出<i class="el-icon-top"></i></el-button>
     </div>
     <!-- 表格 -->
     <el-table :data="tableData" border stripe :header-cell-class-name="headerBg"
