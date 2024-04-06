@@ -3,6 +3,7 @@ package com.plume.management.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.plume.management.pojo.User;
+import com.plume.management.pojo.dto.UserDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,5 +22,7 @@ public interface UserService extends IService<User> {
     void export(HttpServletResponse response) throws IOException;
 
     Boolean imp(MultipartFile file) throws IOException;
+
+    Boolean login(UserDTO userDTO);
     // Integer pageTotal(String userName,String email,String address);
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
+import com.plume.management.pojo.dto.UserDTO;
 import com.plume.management.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,15 +34,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * 查询所有用户
-     * @return
-     */
-    // @GetMapping("/list")
-    // @Operation(summary = "查询所有用户")
-    // public List<User> testSelect() {
-    //     return userService.selectAll();
-    // }
 
     /**
      * 分页查询
@@ -122,5 +114,9 @@ public class UserController {
         return userService.imp(file);
     }
 
+    @PostMapping("/login")
+    public Boolean login(@RequestBody UserDTO userDTO){
+        return userService.login(userDTO);
+    }
 
 }

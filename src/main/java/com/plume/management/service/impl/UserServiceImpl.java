@@ -1,6 +1,7 @@
 package com.plume.management.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.log.Log;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
+import com.plume.management.pojo.dto.UserDTO;
 import com.plume.management.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +32,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     // @Autowired
     // private UserMapper userMapper;
+
+    private static final Log LOG = Log.get();
 
 
     @Override
@@ -125,6 +129,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userList.add(user);
         }
         return saveBatch(userList);
+    }
+
+    @Override
+    public Boolean login(UserDTO userDTO) {
+        if (StringUtils.isBlank(userDTO.getUserName())||StringUtils.isBlank(userDTO.getPassword())){
+            return false;
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username",userDTO.getUserName());
+        queryWrapper.eq("password",userDTO.getPassword());
+        User one = null;
+        try {
+            one = getOne(queryWrapper);
+            return one != null;
+        } catch (Exception e) {
+            LOG.error(e);
+            return false;
+        }
+
     }
 
     // @Override
