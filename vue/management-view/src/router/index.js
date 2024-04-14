@@ -15,12 +15,18 @@ const routes = [
         children: [
             {path: 'home', name: '首页', component: () => import('../views/Home.vue')},
             {path: 'user', name: '用户管理', component: () => import('../views/User.vue')},
+            {path: 'person', name: '用户界面', component: () => import('../views/Person.vue')},
         ]
     },
     {
         path: '/login',
         name: 'Login',
         component: () => import('../views/Login.vue'),
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: () => import('../views/Register.vue'),
     }
 ]
 

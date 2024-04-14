@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.plume.management.exception.LoginFailedException;
 import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
 import com.plume.management.pojo.dto.UserDTO;
@@ -16,13 +17,11 @@ import com.plume.management.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -51,15 +50,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean saveUser(User user) {
-        // 判断用户是否已存在（即是否有 ID）
-        if (user.getUsername() != null) {
-            // 用户已存在，执行更新操作
-            return updateUser(user);
-        } else {
-            // 用户为新用户，设置默认密码并执行保存操作
-            user.setPassword("123456");
-            return save(user);
+
+
+        // 判断用户是否已存在
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", user.getUsername());
+        User one = getOne(queryWrapper);
+
+        if (one != null) {
+            throw new LoginFailedException("用户已存在");
         }
+        if (user.getPassword() == null){
+            user.setPassword("123456");
+        }
+
+        if (user.getNickname() == null){
+            user.setNickname("无名氏");
+        }
+
+        return save(user);
+
     }
 
     private boolean updateUser(User user) {
@@ -95,15 +105,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         writer.addHeaderAlias("createTime", "创建时间");
 
         // 一次性写出list到excel,使用默认样式,强制输出标题
-        writer.write(list,true);
+        writer.write(list, true);
 
         // 设置浏览器响应格式
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
         String fileName = URLEncoder.encode("用户信息", StandardCharsets.UTF_8);
-        response.setHeader("Content-Disposition","attachment;filename="+fileName+".xlsx");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
 
         ServletOutputStream outputStream = response.getOutputStream();
-        writer.flush(outputStream,true);
+        writer.flush(outputStream, true);
         outputStream.close();
         writer.close();
     }
@@ -132,22 +142,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Boolean login(UserDTO userDTO) {
-        if (StringUtils.isBlank(userDTO.getUserName())||StringUtils.isBlank(userDTO.getPassword())){
-            return false;
+    public UserDTO login(UserDTO userDTO) {
+
+        if (StringUtils.isBlank(userDTO.getUserName()) || StringUtils.isBlank(userDTO.getPassword())) {
+            throw new LoginFailedException("参数异常");
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username",userDTO.getUserName());
-        queryWrapper.eq("password",userDTO.getPassword());
+        queryWrapper.eq("username", userDTO.getUserName());
+        queryWrapper.eq("password", userDTO.getPassword());
         User one = null;
         try {
             one = getOne(queryWrapper);
-            return one != null;
+            UserDTO dto = new UserDTO();
+            dto.setUserName(one.getUsername());
+            dto.setPassword(one.getPassword());
+            dto.setNickname(one.getNickname());
+            return dto;
         } catch (Exception e) {
             LOG.error(e);
-            return false;
+            throw new LoginFailedException("用户名或密码错误");
         }
 
+    }
+
+    @Override
+    public Boolean register(User user) {
+        return saveUser(user);
     }
 
     // @Override

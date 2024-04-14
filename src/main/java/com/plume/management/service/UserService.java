@@ -7,6 +7,7 @@ import com.plume.management.pojo.dto.UserDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -23,6 +24,8 @@ public interface UserService extends IService<User> {
 
     Boolean imp(MultipartFile file) throws IOException;
 
-    Boolean login(UserDTO userDTO);
+    UserDTO login(UserDTO userDTO);
+
+    Boolean register(User user);
     // Integer pageTotal(String userName,String email,String address);
 }

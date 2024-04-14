@@ -3,8 +3,10 @@ package com.plume.management.controller;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.plume.management.common.Result;
 import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
 import com.plume.management.pojo.dto.UserDTO;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MulticastSocket;
@@ -115,8 +118,20 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Boolean login(@RequestBody UserDTO userDTO){
-        return userService.login(userDTO);
+    public Result login(@RequestBody UserDTO userDTO)  {
+        return Result.success(userService.login(userDTO));
+    }
+
+    @PostMapping("/register")
+    public Result register(@RequestBody User user)  {
+        return Result.success(userService.register(user));
+    }
+
+    @GetMapping("/username/{username}")
+    public Result findOne(@PathVariable String username){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        return Result.success(userService.getOne(queryWrapper));
     }
 
 }
