@@ -11,6 +11,7 @@ import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
 import com.plume.management.pojo.dto.UserDTO;
 import com.plume.management.service.UserService;
+import com.plume.management.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -68,6 +69,9 @@ public class UserController {
                             @Parameter(description = "邮箱") @RequestParam(value = "email", required = false) String email,
                             @Parameter(description = "地址") @RequestParam(value = "address", required = false) String address) {
 
+        User currentUser = TokenUtils.getCurrentUser();
+        assert currentUser != null;
+        System.out.println("当前操作用户====="+currentUser.getNickname());
         return userService.page(pageNum, pageSize, userName, email, address);
     }
 

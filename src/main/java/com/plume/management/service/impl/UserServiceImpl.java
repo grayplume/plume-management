@@ -14,6 +14,7 @@ import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
 import com.plume.management.pojo.dto.UserDTO;
 import com.plume.management.service.UserService;
+import com.plume.management.utils.TokenUtils;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -153,10 +154,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User one = null;
         try {
             one = getOne(queryWrapper);
+            // 生成用户Token
+            String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
             UserDTO dto = new UserDTO();
             dto.setUserName(one.getUsername());
             dto.setPassword(one.getPassword());
             dto.setNickname(one.getNickname());
+            dto.setToken(token);
             return dto;
         } catch (Exception e) {
             LOG.error(e);
