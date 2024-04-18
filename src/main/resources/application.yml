@@ -19,3 +19,7 @@ mybatis-plus:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+files:
+  upload:
+    path: E:/project/JavaWeb/project/plume-management/files/
