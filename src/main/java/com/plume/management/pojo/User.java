@@ -1,17 +1,15 @@
 package com.plume.management.pojo;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @TableName sys_user
@@ -39,7 +37,7 @@ public class User implements Serializable {
 
     private String address;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 }
