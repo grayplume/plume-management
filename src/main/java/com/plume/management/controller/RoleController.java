@@ -71,4 +71,14 @@ public class RoleController {
         return Result.success(roleService.getOne(queryWrapper));
     }
 
+    @PostMapping("/roleMenu/{roleId}")
+    public Result roleMenu(@PathVariable Integer roleId,@RequestBody List<Integer> menuIds){
+        return Result.success(roleService.roleMenu(roleId,menuIds));
+    }
+
+    @GetMapping("/roleMenu/{roleId}")
+    public Result getRoleMenu(@PathVariable Integer roleId){
+        return Result.success(roleService.getRoleMenu(roleId));
+    }
+
 }

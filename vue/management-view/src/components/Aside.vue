@@ -49,6 +49,12 @@ export default {
             <span slot="title">文件管理</span>
           </template>
         </el-menu-item>
+
+        <el-menu-item index="/menu">
+          <template slot="title"><i class="el-icon-document"></i>
+            <span slot="title">菜单管理</span>
+          </template>
+        </el-menu-item>
         <!--        <el-menu-item index="2-2">选项2</el-menu-item>-->
       </el-menu-item-group>
     </el-submenu>

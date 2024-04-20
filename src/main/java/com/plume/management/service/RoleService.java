@@ -19,4 +19,8 @@ public interface RoleService extends IService<Role> {
     Boolean update(Role role);
 
     Boolean delete(List<Long> ids);
+
+    Boolean roleMenu(Integer roleId, List<Integer> menuIds);
+
+    List<Integer> getRoleMenu(Integer roleId);
 }

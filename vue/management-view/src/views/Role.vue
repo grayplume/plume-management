@@ -10,9 +10,17 @@ export default {
       name: "",
       description: "",
       dialogFormVisible: false,
+      menuDialogVisible: false,
       form: {},
       multipleSelection: [],
-      headerBg: "headerBg"
+      headerBg: "headerBg",
+      menuData: [],
+      roleId: 0,
+      props: {
+        label: "name",
+      },
+      expandedKeys: [],
+      checkedKeys: [],
     }
   },
   created() {
@@ -23,6 +31,7 @@ export default {
   methods: {
     load() {
       this.dialogFormVisible = false
+      this.menuDialogVisible = false
       this.request.get("/role/page", {
         params: {
           pageNum: this.pageNum,
@@ -40,16 +49,58 @@ export default {
     },
     reset() {
       this.name = ''
-      this.descripe = ''
       this.load()
     },
     handleAdd() {
       this.dialogFormVisible = true;
       this.form = {}
     },
+    handleMenu(roleId) {
+      this.menuDialogVisible = true;
+      this.roleId = roleId
+      // 请求菜单数据
+      this.request.get("/menu/findAll", {
+        params: {
+          name: '',
+        }
+      }).then(res => {
+        if (res.code === '200') {
+          this.menuData = res.data
+          // 后台获取菜单数据
+          this.expandedKeys = this.menuData.map(item => item.id)
+          // this.load()
+        } else {
+          this.$message.error("获取失败")
+        }
+      })
+      // 请求菜单选中数据
+      this.request.get("/role/roleMenu/"+this.roleId).then(res => {
+        if (res.code === '200'){
+          this.checkedKeys = res.data
+          // 后台获取菜单数据
+          this.expandedKeys = this.menuData.map(item => item.id)
+        }else {
+          this.$message.error("获取失败")
+        }
+
+      })
+    },
+    handleCheckChange(data, checked, indeterminate) {
+      console.log(data, checked, indeterminate);
+    },
     save() {
       this.dialogFormVisible = false
       this.request.post("/role/save", this.form).then(res => {
+        if (res.code === '200') {
+          this.$message.success("保存成功")
+          this.load()
+        } else {
+          this.$message.error("保存失败")
+        }
+      })
+    },
+    saveRoleMenu() {
+      this.request.post("/role/roleMenu/"+this.roleId , this.$refs.tree.getCheckedKeys()).then(res =>{
         if (res.code === '200') {
           this.$message.success("保存成功")
           this.load()
@@ -116,8 +167,8 @@ export default {
     <div style="margin: 10px 0">
       <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search"
                 v-model="name"></el-input>
-<!--      <el-input style="width: 200px" placeholder="请输入描述" suffix-icon="el-icon-message" v-model="description"-->
-<!--                class="ml-5"></el-input>-->
+      <!--      <el-input style="width: 200px" placeholder="请输入描述" suffix-icon="el-icon-message" v-model="description"-->
+      <!--                class="ml-5"></el-input>-->
       <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
       <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
     </div>
@@ -130,12 +181,12 @@ export default {
         <el-button type="danger" slot="reference">删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
 
-<!--            <el-upload action="http://localhost:8080/user/import" :show-file-list="false" accept="xlsx"-->
-<!--                       :on-success="handleExcelImportSuccess" style="display: inline-block" class="mr-5">-->
-<!--              <el-button type="primary" class="ml-5">导入<i class="el-icon-bottom"></i></el-button>-->
-<!--            </el-upload>-->
+      <!--            <el-upload action="http://localhost:8080/user/import" :show-file-list="false" accept="xlsx"-->
+      <!--                       :on-success="handleExcelImportSuccess" style="display: inline-block" class="mr-5">-->
+      <!--              <el-button type="primary" class="ml-5">导入<i class="el-icon-bottom"></i></el-button>-->
+      <!--            </el-upload>-->
 
-<!--            <el-button type="primary" @click="exp">导出<i class="el-icon-top"></i></el-button>-->
+      <!--            <el-button type="primary" @click="exp">导出<i class="el-icon-top"></i></el-button>-->
     </div>
     <!-- 表格 -->
     <el-table :data="tableData" border stripe :header-cell-class-name="headerBg"
@@ -147,6 +198,7 @@ export default {
 
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <el-button type="info" @click="handleMenu(scope.row.id)">分配菜单<i class="el-icon-menu"></i></el-button>
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
           <!--     删除提示       -->
@@ -187,6 +239,27 @@ export default {
       <div slot="footer" class="dialog-footer">
         <el-button @click="load">取 消</el-button>
         <el-button type="primary" @click="update()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!--  菜单分配dialog  -->
+    <el-dialog title="菜单分配" :visible.sync="menuDialogVisible" width="40%">
+      <el-tree
+          :props="props"
+          :data="menuData"
+          show-checkbox
+          node-key="id"
+          ref="tree"
+          :default-expanded-keys="expandedKeys"
+          :default-checked-keys="checkedKeys"
+          @check-change="handleCheckChange">
+        <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span> <i :class="data.icon"></i>{{ data.name }}</span>
+        </span>
+      </el-tree>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="load">取 消</el-button>
+        <el-button type="primary" @click="saveRoleMenu()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
