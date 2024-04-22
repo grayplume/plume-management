@@ -9,6 +9,7 @@ export default {
       pageSize: 10,
       name: "",
       description: "",
+      flag: "",
       dialogFormVisible: false,
       menuDialogVisible: false,
       form: {},
@@ -16,6 +17,7 @@ export default {
       headerBg: "headerBg",
       menuData: [],
       roleId: 0,
+      roleFlag: "",
       props: {
         label: "name",
       },
@@ -55,9 +57,10 @@ export default {
       this.dialogFormVisible = true;
       this.form = {}
     },
-    handleMenu(roleId) {
+    handleMenu(role) {
       this.menuDialogVisible = true;
-      this.roleId = roleId
+      this.roleId = role.id
+      this.roleFlag = role.flag
       // 请求菜单数据
       this.request.get("/menu/findAll", {
         params: {
@@ -74,12 +77,12 @@ export default {
         }
       })
       // 请求菜单选中数据
-      this.request.get("/role/roleMenu/"+this.roleId).then(res => {
-        if (res.code === '200'){
+      this.request.get("/role/roleMenu/" + this.roleId).then(res => {
+        if (res.code === '200') {
           this.checkedKeys = res.data
           // 后台获取菜单数据
           this.expandedKeys = this.menuData.map(item => item.id)
-        }else {
+        } else {
           this.$message.error("获取失败")
         }
 
@@ -100,10 +103,16 @@ export default {
       })
     },
     saveRoleMenu() {
-      this.request.post("/role/roleMenu/"+this.roleId , this.$refs.tree.getCheckedKeys()).then(res =>{
+      this.request.post("/role/roleMenu/" + this.roleId, this.$refs.tree.getCheckedKeys()).then(res => {
         if (res.code === '200') {
-          this.$message.success("保存成功")
-          this.load()
+          // 操作管理员角色时需要重新登录
+          if (this.roleFlag === 'ROLE_ADMIN'){
+            this.$store.commit("logout")
+          }else {
+            this.$message.success("保存成功")
+            this.load()
+          }
+
         } else {
           this.$message.error("保存失败")
         }
@@ -194,11 +203,12 @@ export default {
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" width="70"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
+      <el-table-column prop="flag" label="唯一标识"></el-table-column>
       <el-table-column prop="description" label="描述"></el-table-column>
 
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="info" @click="handleMenu(scope.row.id)">分配菜单<i class="el-icon-menu"></i></el-button>
+          <el-button type="info" @click="handleMenu(scope.row)">分配菜单<i class="el-icon-menu"></i></el-button>
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
           <!--     删除提示       -->
@@ -232,6 +242,9 @@ export default {
         <el-form-item label="名称">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
+        <el-form-item label="唯一标识">
+          <el-input v-model="form.flag" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="form.description" auto-complete="off"></el-input>
         </el-form-item>
@@ -249,9 +262,11 @@ export default {
           show-checkbox
           node-key="id"
           ref="tree"
+          :check-strictly = "true"
           :default-expanded-keys="expandedKeys"
           :default-checked-keys="checkedKeys"
           @check-change="handleCheckChange">
+        <!-- :check-strictly = "true"-->
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span> <i :class="data.icon"></i>{{ data.name }}</span>
         </span>

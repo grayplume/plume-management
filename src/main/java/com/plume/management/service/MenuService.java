@@ -20,4 +20,5 @@ public interface MenuService extends IService<Menu> {
 
     Boolean delete(List<Long> ids);
 
+    List<Menu> findAll(String name);
 }

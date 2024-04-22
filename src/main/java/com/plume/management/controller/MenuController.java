@@ -29,20 +29,8 @@ public class MenuController {
     @GetMapping("/findAll")
     @Operation(summary = "分页查询")
     public Result findAll(@Parameter(description = "角色名称") @RequestParam(value = "name", required = false) String name){
-        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-        if (name != null) {
-            queryWrapper.like("name", name);
-        }
-        queryWrapper.orderByAsc("id");
-        List<Menu> list = menuService.list(queryWrapper);
-        // 找出pid为null的一级菜单
-        List<Menu> parentNode = list.stream().filter(menu -> menu.getPid() == null).toList();
-        // 找出一级菜单的子菜单
-        for (Menu menu:parentNode) {
-            // 筛选所有菜单中pid等于父菜单id的菜单
-            menu.setChildren(list.stream().filter(m -> menu.getId().equals(m.getPid())).collect(Collectors.toList()));
-        }
-        return Result.success(parentNode);
+
+        return Result.success(menuService.findAll(name));
     }
     @GetMapping("/page")
     @Operation(summary = "分页查询")

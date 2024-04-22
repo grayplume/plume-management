@@ -81,4 +81,9 @@ public class RoleController {
         return Result.success(roleService.getRoleMenu(roleId));
     }
 
+    @GetMapping("/list")
+    public Result list(){
+        return Result.success(roleService.list());
+    }
+
 }

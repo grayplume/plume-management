@@ -26,13 +26,21 @@
 
 import Aside from '@/components/Aside.vue'
 import Header from "@/components/Header.vue";
+import user from "@/views/User.vue";
 
 export default {
   name: 'HomeView',
+  computed: {
+
+  },
   components: {
     Header,
     Aside
   },
+  created() {
+
+  },
+
   data() {
     return {
       isCollapse: false,
@@ -41,6 +49,7 @@ export default {
       logoTextShow: true,
     }
   },
+
 
   methods: { // 点击收缩
     collapse() {
@@ -58,6 +67,7 @@ export default {
 
   }
 }
+
 </script>
 
 

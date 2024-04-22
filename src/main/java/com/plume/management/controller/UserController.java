@@ -1,13 +1,8 @@
 package com.plume.management.controller;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.poi.excel.ExcelReader;
-import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.plume.management.common.Result;
-import com.plume.management.mapper.UserMapper;
 import com.plume.management.pojo.User;
 import com.plume.management.pojo.dto.UserDTO;
 import com.plume.management.service.UserService;
@@ -15,21 +10,13 @@ import com.plume.management.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MulticastSocket;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -82,8 +69,13 @@ public class UserController {
      * @return
      */
     @PostMapping("/save")
-    public Boolean save(@RequestBody User user) {
-        return userService.saveUser(user);
+    public Result save(@RequestBody User user) {
+        // 判断id是否存在决定是保存还是更新
+        if (user.getId() == null) {
+            user.setPassword("123456");
+            return Result.success(userService.save(user));
+        }
+        return Result.success(userService.updateById(user));
     }
 
     /**

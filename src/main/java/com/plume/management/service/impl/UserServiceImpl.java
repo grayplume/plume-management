@@ -10,14 +10,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.plume.management.exception.LoginFailedException;
+import com.plume.management.mapper.RoleMapper;
+import com.plume.management.mapper.RoleMenuMapper;
 import com.plume.management.mapper.UserMapper;
+import com.plume.management.pojo.Menu;
 import com.plume.management.pojo.User;
 import com.plume.management.pojo.dto.UserDTO;
+import com.plume.management.service.MenuService;
 import com.plume.management.service.UserService;
 import com.plume.management.utils.TokenUtils;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +40,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     // private UserMapper userMapper;
 
     private static final Log LOG = Log.get();
+
+    @Autowired
+    private RoleMapper roleMapper;
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
+    @Autowired
+    private MenuService menuService;
 
 
     @Override
@@ -161,12 +174,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             dto.setPassword(one.getPassword());
             dto.setNickname(one.getNickname());
             dto.setToken(token);
+            String role = one.getRole();  //ROLE_ADMIN
+
+            ArrayList<Menu> roleMenus = getRoleMenus(role);
+
+            dto.setMenus(roleMenus);
             return dto;
         } catch (Exception e) {
             LOG.error(e);
             throw new LoginFailedException("用户名或密码错误");
         }
 
+    }
+
+    /**
+     * 获取当前角色菜单列表
+     * @param role
+     * @return
+     */
+    private ArrayList<Menu> getRoleMenus(String role) {
+        Integer roleId = roleMapper.selectByFlag(role);
+        List<Integer> menuIds = roleMenuMapper.selectByRoleId(roleId);
+        List<Menu> menuList = menuService.findAll("");
+
+        ArrayList<Menu> roleMenus = new ArrayList<>();
+        // 筛选当前用户菜单
+        for (Menu menu : menuList) {
+            if (menuIds.contains(menu.getId())){
+                roleMenus.add(menu);
+            }
+            menu.getChildren().removeIf(item -> !menuIds.contains(item.getId()));
+        }
+        return roleMenus;
     }
 
     @Override

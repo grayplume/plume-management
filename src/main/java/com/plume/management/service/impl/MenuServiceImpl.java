@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author plume86
@@ -38,6 +39,24 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
     @Override
     public Boolean delete(List<Long> ids) {
         return removeByIds(ids);
+    }
+
+    @Override
+    public List<Menu> findAll(String name) {
+        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
+        if (name != null) {
+            queryWrapper.like("name", name);
+        }
+        queryWrapper.orderByAsc("id");
+        List<Menu> list = list(queryWrapper);
+        // 找出pid为null的一级菜单
+        List<Menu> parentNode = list.stream().filter(menu -> menu.getPid() == null).toList();
+        // 找出一级菜单的子菜单
+        for (Menu menu:parentNode) {
+            // 筛选所有菜单中pid等于父菜单id的菜单
+            menu.setChildren(list.stream().filter(m -> menu.getId().equals(m.getPid())).collect(Collectors.toList()));
+        }
+        return parentNode;
     }
 }
 

@@ -1,8 +1,15 @@
 <script>
+import role from "@/views/Role.vue";
+
 export default {
   name: "User",
-  data(){
-    return{
+  computed: {
+    role() {
+      return role
+    }
+  },
+  data() {
+    return {
       tableData: [],
       total: 0,
       pageNum: 1,
@@ -13,7 +20,8 @@ export default {
       dialogFormVisible: false,
       form: {},
       multipleSelection: [],
-      headerBg: "headerBg"
+      headerBg: "headerBg",
+      roles: {},
     }
   },
   created() {
@@ -21,7 +29,7 @@ export default {
     console.log("测试")
     this.load()
   },
-  methods:{
+  methods: {
     load() {
       this.dialogFormVisible = false
       this.request.get("/user/page", {
@@ -32,12 +40,17 @@ export default {
           email: this.email,
           address: this.address
         }
+      }).then(res => {
+        console.log(res)
+        this.tableData = res.records
+        this.total = res.total
       })
-          .then(res => {
-            console.log(res)
-            this.tableData = res.records
-            this.total = res.total
-          })
+
+      this.request.get("/role/list").then(res => {
+        if (res.code === '200'){
+          this.roles = res.data
+        }
+      })
     },
     reset() {
       this.userName = ''
@@ -90,10 +103,10 @@ export default {
       this.pageNum = pageNum
       this.load()
     },
-    exp(){
+    exp() {
       window.open("http://localhost:8080/user/export")
     },
-    handleExcelImportSuccess(){
+    handleExcelImportSuccess() {
       this.$message.success("文件导入成功")
       this.load()
     }
@@ -120,10 +133,11 @@ export default {
       <el-popconfirm class="ml-5" confirm-button-text="确定" cancel-button-text="我再想想" icon="el-icon-info"
                      icon-color="red"
                      title="确定批量删除吗?" @confirm="delBatch()">
-        <el-button type="danger" slot="reference" >删除<i class="el-icon-remove-outline"></i></el-button>
+        <el-button type="danger" slot="reference">删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
 
-      <el-upload action="http://localhost:8080/user/import" :show-file-list="false" accept="xlsx" :on-success="handleExcelImportSuccess" style="display: inline-block" class="mr-5">
+      <el-upload action="http://localhost:8080/user/import" :show-file-list="false" accept="xlsx"
+                 :on-success="handleExcelImportSuccess" style="display: inline-block" class="mr-5">
         <el-button type="primary" class="ml-5">导入<i class="el-icon-bottom"></i></el-button>
       </el-upload>
 
@@ -135,6 +149,7 @@ export default {
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" width="70"></el-table-column>
       <el-table-column prop="username" label="用户名" width="140"></el-table-column>
+      <el-table-column prop="role" label="角色"></el-table-column>
       <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
       <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="phone" label="电话"></el-table-column>
@@ -161,7 +176,7 @@ export default {
           :current-page="pageNum"
           :page-size="pageSize"
           :page-sizes="[5, 10, 15, 20]"
-          :small= "true"
+          :small="true"
           :disabled="false"
           :background="true"
           layout="total, sizes, prev, pager, next, jumper"
@@ -174,6 +189,11 @@ export default {
       <el-form label-width="70px" size="small">
         <el-form-item label="用户名">
           <el-input v-model="form.username" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select clearable v-model="form.role" placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in roles" :key="item.name" :label="item.name" :value="item.flag"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="昵称">
           <el-input v-model="form.nickname" auto-complete="off"></el-input>

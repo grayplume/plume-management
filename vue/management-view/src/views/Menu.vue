@@ -125,9 +125,10 @@ export default {
       <el-table-column prop="id" label="ID" width="70"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="path" label="路径"></el-table-column>
+      <el-table-column prop="pagePath" label="页面路径"></el-table-column>
       <el-table-column label="图标" align="center">
         <template slot-scope="scope">
-<!--          {{scope.row.icon}}-->
+          <!--          {{scope.row.icon}}-->
           <i :class="scope.row.icon" style="font-size: 18px"/>
         </template>
       </el-table-column>
@@ -169,6 +170,9 @@ export default {
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="form.description" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="页面路径">
+          <el-input v-model="form.pagePath" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
