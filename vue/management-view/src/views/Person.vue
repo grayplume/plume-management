@@ -20,7 +20,7 @@ export default {
       this.request.post("/user/save", this.form).then(res => {
         if (res) {
           this.$message.success("保存成功")
-          this.load()
+          this.$router.push("/home")
         } else {
           this.$message.error("保存失败")
         }

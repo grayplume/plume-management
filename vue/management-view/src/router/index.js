@@ -5,30 +5,32 @@ import store from "@/store";
 
 
 Vue.use(VueRouter)
+// 重复路由
+const originaPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originaPush.call(this, location).catch(err => err)
+}
 
-const routes = [
-    {
-        path: '/login',
-        name: 'Login',
-        component: () => import('../views/Login.vue'),
-    },
-    {
-        path: '/register',
-        name: 'Register',
-        component: () => import('../views/Register.vue'),
-    },
-    {
-        path: '*',
-        name: 'NotFound',
-        component: () => import('../views/404.vue')
-    }
-]
+// 重置路由
+export const resetRouter = () =>{
+    router.matcher = new VueRouter({
+        mode: 'history',
+        base: process.env.BASE_URL,
+        routes
+    })
+}
+
+const routes = [{
+    path: '/login', name: 'Login', component: () => import('../views/Login.vue'),
+}, {
+    path: '/register', name: 'Register', component: () => import('../views/Register.vue'),
+}, {
+    path: '/404', name: 'NotFound', component: () => import('../views/404.vue')
+}]
 
 
 const router = new VueRouter({
-    routes,
-    mode: "history",
-    base: process.env.BASE_URL,
+    routes, mode: "history", base: process.env.BASE_URL,
 })
 // 刷新页面会导致路由重置
 export const setRoutes = () => {
@@ -40,7 +42,7 @@ export const setRoutes = () => {
             name: "Manage",
             component: () => import('../views/Manage.vue'),
             redirect: "/home",
-            children: []
+            children: [{path: 'person', name: '个人信息', component: () => import('../views/Person.vue')},]
         }
         const menus = JSON.parse(storeMenus)
         menus.forEach(item => {
@@ -72,13 +74,25 @@ export const setRoutes = () => {
         }
     }
 }
+
+
 setRoutes()
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
     localStorage.setItem("currentPathName", to.name)  // 设置当前路由名称
     store.commit("setPath")  // 触发store数据更新
-    next() //放行路由
+
+    if (!to.matched.length) {
+        const storeMenus = localStorage.getItem("menus")
+        if (storeMenus) {
+            next("/404") //放行路由
+        } else {
+            // 跳转登录
+            next("/login")
+        }
+    }
+    next()
 })
 
 export default router
