@@ -29,14 +29,13 @@ public class RoleController {
 
     @PostMapping("/save")
     public Result save(@RequestBody Role role) {
-        return Result.success(roleService.save(role));
+        // 判断id是否存在决定是保存还是更新
+        if (role.getId() == null) {
+            return Result.success(roleService.save(role));
+        }
+        return Result.success(roleService.updateById(role));
     }
 
-
-    @PostMapping("/update")
-    public Result update(@RequestBody Role role) {
-        return Result.success(roleService.update(role));
-    }
 
     /**
      * 删除用户

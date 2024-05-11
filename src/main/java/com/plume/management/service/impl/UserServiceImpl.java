@@ -47,19 +47,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RoleMenuMapper roleMenuMapper;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Override
-    public IPage<User> page(Integer pageNum, Integer pageSize, String userName, String email, String address) {
+    public IPage<User> page(Integer pageNum, Integer pageSize, String username, String email, String address) {
         // 手写方法 XML动态SQL
         // return userMapper.page(pageNum,pageSize,userName,email,address);
         // 插件实现
         IPage<User> page = new Page<>(pageNum, pageSize);
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(userName), "username", userName)
-                .like(StringUtils.isNotBlank(email), "email", email)
-                .like(StringUtils.isNotBlank(address), "address", address);
-        return page(page, queryWrapper);
+        // QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        // queryWrapper.like(StringUtils.isNotBlank(userName), "username", userName)
+        //         .like(StringUtils.isNotBlank(email), "email", email)
+        //         .like(StringUtils.isNotBlank(address), "address", address);
+        return userMapper.findPage(page, username,email,address);
     }
 
     @Override
@@ -170,11 +172,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 生成用户Token
             String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
             UserDTO dto = new UserDTO();
+            dto.setId(one.getId());
             dto.setUserName(one.getUsername());
             dto.setPassword(one.getPassword());
             dto.setNickname(one.getNickname());
             dto.setToken(token);
             String role = one.getRole();  //ROLE_ADMIN
+            dto.setRole(role);
 
             ArrayList<Menu> roleMenus = getRoleMenus(role);
 

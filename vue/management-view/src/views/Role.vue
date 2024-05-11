@@ -106,24 +106,13 @@ export default {
       this.request.post("/role/roleMenu/" + this.roleId, this.$refs.tree.getCheckedKeys()).then(res => {
         if (res.code === '200') {
           // 操作管理员角色时需要重新登录
-          if (this.roleFlag === 'ROLE_ADMIN'){
+          if (this.roleFlag === 'ROLE_ADMIN') {
             this.$store.commit("logout")
-          }else {
+          } else {
             this.$message.success("保存成功")
             this.load()
           }
 
-        } else {
-          this.$message.error("保存失败")
-        }
-      })
-    },
-    update() {
-      this.dialogFormVisible = false
-      this.request.post("/role/update", this.form).then(res => {
-        if (res.code === '200') {
-          this.$message.success("保存成功")
-          this.load()
         } else {
           this.$message.error("保存失败")
         }
@@ -206,15 +195,14 @@ export default {
       <el-table-column prop="flag" label="唯一标识"></el-table-column>
       <el-table-column prop="description" label="描述"></el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="280  " align="center">
         <template slot-scope="scope">
           <el-button type="info" @click="handleMenu(scope.row)">分配菜单<i class="el-icon-menu"></i></el-button>
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
           <!--     删除提示       -->
           <el-popconfirm class="ml-5" confirm-button-text="确定" cancel-button-text="我再想想" icon="el-icon-info"
-                         icon-color="red"
-                         title="确定删除吗?" @confirm="del(scope.row.id)">
+                         icon-color="red" title="确定删除吗?" @confirm="del(scope.row.id)">
             <el-button type="danger" slot="reference">删除<i class="el-icon-remove-outline"></i></el-button>
           </el-popconfirm>
         </template>
@@ -251,7 +239,7 @@ export default {
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="load">取 消</el-button>
-        <el-button type="primary" @click="update()">确 定</el-button>
+        <el-button type="primary" @click="save()">确 定</el-button>
       </div>
     </el-dialog>
     <!--  菜单分配dialog  -->
@@ -262,7 +250,7 @@ export default {
           show-checkbox
           node-key="id"
           ref="tree"
-          :check-strictly = "true"
+          :check-strictly="true"
           :default-expanded-keys="expandedKeys"
           :default-checked-keys="checkedKeys"
           @check-change="handleCheckChange">

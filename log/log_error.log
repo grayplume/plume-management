@@ -1,0 +1,6 @@
+2024-05-11 12:15:25 |ERROR |http-nio-8080-exec-5 |GlobalExceptionHandler.java:26 |com.plume.management.exception.GlobalExceptionHandler |异常信息：验证失败,请重新登录
+2024-05-11 12:15:25 |ERROR |http-nio-8080-exec-4 |GlobalExceptionHandler.java:26 |com.plume.management.exception.GlobalExceptionHandler |异常信息：验证失败,请重新登录
+2024-05-11 12:15:25 |ERROR |http-nio-8080-exec-7 |GlobalExceptionHandler.java:26 |com.plume.management.exception.GlobalExceptionHandler |异常信息：验证失败,请重新登录
+2024-05-11 12:15:25 |ERROR |http-nio-8080-exec-8 |GlobalExceptionHandler.java:26 |com.plume.management.exception.GlobalExceptionHandler |异常信息：验证失败,请重新登录
+2024-05-11 15:58:42 |ERROR |http-nio-8080-exec-1 |GlobalExceptionHandler.java:26 |com.plume.management.exception.GlobalExceptionHandler |异常信息：无token,请重新登录
+2024-05-11 15:59:11 |ERROR |http-nio-8080-exec-1 |GlobalExceptionHandler.java:26 |com.plume.management.exception.GlobalExceptionHandler |异常信息：无token,请重新登录

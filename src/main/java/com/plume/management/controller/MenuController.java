@@ -27,7 +27,6 @@ public class MenuController {
 
 
     @GetMapping("/findAll")
-    @Operation(summary = "分页查询")
     public Result findAll(@Parameter(description = "角色名称") @RequestParam(value = "name", required = false) String name){
 
         return Result.success(menuService.findAll(name));

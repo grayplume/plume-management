@@ -12,7 +12,7 @@ VueRouter.prototype.push = function push(location) {
 }
 
 // 重置路由
-export const resetRouter = () =>{
+export const resetRouter = () => {
     router.matcher = new VueRouter({
         mode: 'history',
         base: process.env.BASE_URL,
@@ -26,6 +26,13 @@ const routes = [{
     path: '/register', name: 'Register', component: () => import('../views/Register.vue'),
 }, {
     path: '/404', name: 'NotFound', component: () => import('../views/404.vue')
+},{
+    path: '/front', name: 'Front', component: () => import('../views/front/Front.vue'),
+    children: [{
+        path: 'home',
+        name: 'FrontHome',
+        component: ()=>import('../views/front/Home.vue')
+    }]
 }]
 
 

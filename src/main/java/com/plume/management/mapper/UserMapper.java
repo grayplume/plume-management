@@ -1,6 +1,7 @@
 package com.plume.management.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.plume.management.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,6 +15,7 @@ import java.util.List;
 */
 // @Mapper
 public interface UserMapper extends BaseMapper<User> {
+    IPage<User> findPage(IPage<User> page, String username, String email, String address);
 
     // List<User> selectAll();
 

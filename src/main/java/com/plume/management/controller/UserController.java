@@ -52,14 +52,11 @@ public class UserController {
     @Operation(summary = "分页查询")
     public IPage<User> page(@Parameter(description = "页数") @RequestParam Integer pageNum,
                             @Parameter(description = "页面大小") @RequestParam Integer pageSize,
-                            @Parameter(description = "用户名") @RequestParam(value = "userName", required = false) String userName,
+                            @Parameter(description = "用户名") @RequestParam(value = "userName", required = false) String username,
                             @Parameter(description = "邮箱") @RequestParam(value = "email", required = false) String email,
                             @Parameter(description = "地址") @RequestParam(value = "address", required = false) String address) {
 
-        User currentUser = TokenUtils.getCurrentUser();
-        assert currentUser != null;
-        System.out.println("当前操作用户====="+currentUser.getNickname());
-        return userService.page(pageNum, pageSize, userName, email, address);
+        return userService.page(pageNum, pageSize, username, email, address);
     }
 
     /**
@@ -128,6 +125,13 @@ public class UserController {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",username);
         return Result.success(userService.getOne(queryWrapper));
+    }
+
+    @GetMapping("/role/{role}")
+    public Result findUsersByRole(@PathVariable String role){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role",role);
+        return Result.success(userService.list(queryWrapper));
     }
 
 }

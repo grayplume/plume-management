@@ -1,0 +1,21 @@
+2024-04-30 21:37:34 |INFO  |main |StartupInfoLogger.java:50 |com.plume.management.PlumeManagementApplication |Starting PlumeManagementApplication using Java 17.0.8 with PID 6088 (E:\project\JavaWeb\project\plume-management\target\classes started by plume86 in E:\project\JavaWeb\project\plume-management)
+2024-04-30 21:37:34 |INFO  |main |SpringApplication.java:660 |com.plume.management.PlumeManagementApplication |The following 1 profile is active: "dev"
+2024-04-30 21:37:35 |INFO  |main |RepositoryConfigurationDelegate.java:139 |org.springframework.data.repository.config.RepositoryConfigurationDelegate |Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2024-04-30 21:37:35 |INFO  |main |RepositoryConfigurationDelegate.java:208 |org.springframework.data.repository.config.RepositoryConfigurationDelegate |Finished Spring Data repository scanning in 15 ms. Found 0 JDBC repository interfaces.
+2024-04-30 21:37:36 |INFO  |main |TomcatWebServer.java:109 |org.springframework.boot.web.embedded.tomcat.TomcatWebServer |Tomcat initialized with port 8080 (http)
+2024-04-30 21:37:36 |INFO  |main |DirectJDKLog.java:173 |org.apache.coyote.http11.Http11NioProtocol |Initializing ProtocolHandler ["http-nio-8080"]
+2024-04-30 21:37:36 |INFO  |main |DirectJDKLog.java:173 |org.apache.catalina.core.StandardService |Starting service [Tomcat]
+2024-04-30 21:37:36 |INFO  |main |DirectJDKLog.java:173 |org.apache.catalina.core.StandardEngine |Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-04-30 21:37:36 |INFO  |main |DirectJDKLog.java:173 |org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] |Initializing Spring embedded WebApplicationContext
+2024-04-30 21:37:36 |INFO  |main |ServletWebServerApplicationContext.java:296 |org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext |Root WebApplicationContext: initialization completed in 2020 ms
+2024-04-30 21:37:37 |INFO  |main |HikariDataSource.java:110 |com.zaxxer.hikari.HikariDataSource |HikariPool-1 - Starting...
+2024-04-30 21:37:37 |INFO  |main |HikariPool.java:565 |com.zaxxer.hikari.pool.HikariPool |HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5c997de8
+2024-04-30 21:37:37 |INFO  |main |HikariDataSource.java:123 |com.zaxxer.hikari.HikariDataSource |HikariPool-1 - Start completed.
+2024-04-30 21:37:38 |INFO  |main |DirectJDKLog.java:173 |org.apache.coyote.http11.Http11NioProtocol |Starting ProtocolHandler ["http-nio-8080"]
+2024-04-30 21:37:38 |INFO  |main |TomcatWebServer.java:241 |org.springframework.boot.web.embedded.tomcat.TomcatWebServer |Tomcat started on port 8080 (http) with context path ''
+2024-04-30 21:37:38 |INFO  |main |StartupInfoLogger.java:56 |com.plume.management.PlumeManagementApplication |Started PlumeManagementApplication in 4.131 seconds (process running for 4.966)
+2024-04-30 21:38:22 |INFO  |http-nio-8080-exec-1 |DirectJDKLog.java:173 |org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] |Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-04-30 21:38:22 |INFO  |http-nio-8080-exec-1 |FrameworkServlet.java:532 |org.springframework.web.servlet.DispatcherServlet |Initializing Servlet 'dispatcherServlet'
+2024-04-30 21:38:22 |INFO  |http-nio-8080-exec-1 |FrameworkServlet.java:554 |org.springframework.web.servlet.DispatcherServlet |Completed initialization in 0 ms
+2024-04-30 22:05:28 |INFO  |SpringApplicationShutdownHook |HikariDataSource.java:350 |com.zaxxer.hikari.HikariDataSource |HikariPool-1 - Shutdown initiated...
+2024-04-30 22:05:28 |INFO  |SpringApplicationShutdownHook |HikariDataSource.java:352 |com.zaxxer.hikari.HikariDataSource |HikariPool-1 - Shutdown completed.

@@ -16,7 +16,7 @@ import java.util.List;
 public interface UserService extends IService<User> {
 
     // List<User> selectAll();
-    IPage<User> page(Integer pageNum, Integer pageSize, String userName, String email, String address);
+    IPage<User> page(Integer pageNum, Integer pageSize, String username, String email, String address);
     boolean saveUser(User user);
     boolean update(User user);
     boolean delete(List<Long> ids);

@@ -17,11 +17,13 @@ public class RoleMenu implements Serializable {
     /**
      * 角色id
      */
+    @TableId(value = "role_id")
     private Integer roleId;
 
     /**
      * 菜单id
      */
+    @TableField(value = "menu_id")
     private Integer menuId;
 
     @TableField(exist = false)

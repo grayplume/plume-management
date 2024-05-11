@@ -18,10 +18,14 @@ export default {
       email: "",
       address: "",
       dialogFormVisible: false,
+      dialogCourseVisible: false,
+      dialogStudentCourseVisible: false,
       form: {},
       multipleSelection: [],
       headerBg: "headerBg",
       roles: {},
+      courses: [],
+      stuCourses: [],
     }
   },
   created() {
@@ -47,7 +51,7 @@ export default {
       })
 
       this.request.get("/role/list").then(res => {
-        if (res.code === '200'){
+        if (res.code === '200') {
           this.roles = res.data
         }
       })
@@ -76,6 +80,14 @@ export default {
     handleEdit(row) {
       this.form = row
       this.dialogFormVisible = true
+    },
+    handleCourse(courses) {
+      this.courses = courses
+      this.dialogCourseVisible = true
+    },
+    handleStuCourse(stuCourse) {
+      this.stuCourses = stuCourse
+      this.dialogStudentCourseVisible = true
     },
     del(id) {
       this.request.post("/user/delete/" + id).then(res => {
@@ -148,15 +160,21 @@ export default {
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" width="70"></el-table-column>
-      <el-table-column prop="username" label="用户名" width="140"></el-table-column>
+      <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column prop="role" label="角色"></el-table-column>
-      <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
+      <el-table-column prop="nickname" label="昵称"></el-table-column>
       <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="phone" label="电话"></el-table-column>
       <el-table-column prop="address" label="地址"></el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="300  " align="center">
         <template slot-scope="scope">
+          <el-button type="primary" v-if="scope.row.role==='ROLE_TEACHER'" @click="handleCourse(scope.row.courses)">
+            查看教授课程<i class="el-icon-paperclip"></i>
+          </el-button>
+          <el-button type="primary" v-if="scope.row.role==='ROLE_STUDENTS'"
+                     @click="handleStuCourse(scope.row.stuCourses)">查看已选课程<i class="el-icon-paperclip"></i>
+          </el-button>
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
           <!--     删除提示       -->
@@ -166,6 +184,7 @@ export default {
             <el-button type="danger" slot="reference">删除<i class="el-icon-remove-outline"></i></el-button>
           </el-popconfirm>
         </template>
+
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -184,7 +203,8 @@ export default {
       />
     </div>
 
-    <!--     dialog   -->
+
+    <!--    编辑 dialog   -->
     <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="40%">
       <el-form label-width="70px" size="small">
         <el-form-item label="用户名">
@@ -207,13 +227,29 @@ export default {
         <el-form-item label="地址">
           <el-input v-model="form.address" auto-complete="off"></el-input>
         </el-form-item>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="load">取 消</el-button>
         <el-button type="primary" @click="save()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!--    老师 课程dialog   -->
+    <el-dialog title="课程信息" :visible.sync="dialogCourseVisible" width="40%">
+      <el-table :data="courses" border stripe>
+        <el-table-column prop="name" label="课程名称"></el-table-column>
+        <el-table-column prop="score" label="学分"></el-table-column>
+      </el-table>
+    </el-dialog>
+
+    <!--     学生课程dialog   -->
+    <el-dialog title="课程信息" :visible.sync="dialogStudentCourseVisible" width="40%">
+      <el-table :data="courses" border stripe>
+        <el-table-column prop="name" label="课程名称"></el-table-column>
+        <el-table-column prop="score" label="学分"></el-table-column>
+      </el-table>
+    </el-dialog>
+
   </div>
 </template>
 

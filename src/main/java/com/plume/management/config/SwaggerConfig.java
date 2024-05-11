@@ -27,21 +27,21 @@ public class SwaggerConfig {
                         .url("https://springshop.wiki.github.org/docs"));
     }
 
-    @Bean
-    public GroupedOpenApi userApi() {
-        return GroupedOpenApi.builder()
-                .group("user")
-                .pathsToMatch("/user/**")
-                .build();
-    }
-
-    @Bean
-    public GroupedOpenApi fileApi() {
-        return GroupedOpenApi.builder()
-                .group("file")
-                .pathsToMatch("/file/**")
-                .build();
-    }
+    // @Bean
+    // public GroupedOpenApi userApi() {
+    //     return GroupedOpenApi.builder()
+    //             .group("user")
+    //             .pathsToMatch("/user/**")
+    //             .build();
+    // }
+    //
+    // @Bean
+    // public GroupedOpenApi fileApi() {
+    //     return GroupedOpenApi.builder()
+    //             .group("file")
+    //             .pathsToMatch("/file/**")
+    //             .build();
+    // }
 
 
 }

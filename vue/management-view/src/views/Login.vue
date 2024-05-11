@@ -29,8 +29,15 @@ export default {
               console.log(JSON.stringify(res.data))
               // 动态设置用户路由
               setRoutes()
-              this.$router.push("/")
+
               this.$message.success("登录成功")
+
+              if (res.data.role === 'ROLE_STUDENTS'){
+                this.$router.push("/front/home")
+              }else {
+                this.$router.push("/")
+              }
+
             }else{
               this.$message.error(res.msg)
             }

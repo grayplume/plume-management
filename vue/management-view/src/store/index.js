@@ -14,10 +14,22 @@ const store = new Vuex.Store({
             state.currentPathName = localStorage.getItem("currentPathName")
         },
         logout() {
+            let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+
+            if (user.role === 'ROLE_STUDENTS'){
+                // 清空缓存
+                localStorage.removeItem("user")
+                localStorage.removeItem("menus")
+                router.push("/front/home")
+            }else {
+                router.push("/login")
+            }
+
+
             // 清空缓存
             localStorage.removeItem("user")
             localStorage.removeItem("menus")
-            router.push("/login")
+            // router.push("/login")
 
             //重置路由
             resetRouter()

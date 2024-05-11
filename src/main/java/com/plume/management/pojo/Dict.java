@@ -17,6 +17,7 @@ public class Dict implements Serializable {
     /**
      * 名称
      */
+    @TableId(value = "name")
     private String name;
 
     /**
